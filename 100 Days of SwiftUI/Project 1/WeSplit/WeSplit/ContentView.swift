@@ -59,6 +59,7 @@ struct ContentView: View {
                 }
                 Section("Result") {
                     Text("Tip: \(tipAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))")
+                        .foregroundStyle((tipSelected == -1 && tipCustom == 0) ? .red : .primary)
                     Text("Total: \(totalCost, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))")
                     if numberOfPeople > 1 && totalCost != 0.0 {
                         Text("Each: \(totalCost / Double(numberOfPeople), format: .currency(code: Locale.current.currency?.identifier ?? "USD"))")

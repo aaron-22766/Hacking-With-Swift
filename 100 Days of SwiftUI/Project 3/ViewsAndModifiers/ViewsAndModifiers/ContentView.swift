@@ -1,56 +1,29 @@
 //
 //  ContentView.swift
-//  GuessTheFlag
+//  ViewsAndModifiers
 //
-//  Created by Aaron Rabenstein on 16.05.24.
+//  Created by Aaron Rabenstein on 17.05.24.
 //
 
 import SwiftUI
 
-struct FlagImage: View {
-    let image: String
-    
-    var body: some View {
-        Image(image)
-            .cornerRadius(20)
-            .shadow(radius: 10)
-    }
-    
-    init(_ image: String) {
-        self.image = image
-    }
-}
 
-struct Box: View {
-    let text: String
-    
-    var body: some View {
-        Text(text)
+struct Label: ViewModifier {
+    func body(content: Content) -> some View {
+        content
             .font(.headline.bold())
             .foregroundStyle(.primary)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(.ultraThinMaterial)
             .clipShape(.capsule)
     }
-    
-    init(_ text: String) {
-        self.text = text
-    }
 }
 
-//struct MainTitle: ViewModifier {
-//    func body(content: Content) -> some View {
-//        content
-//            .foregroundStyle(.blue)
-//            .font(.largeTitle.bold())
-//    }
-//}
-//
-//extension View {
-//    func mainTitle() -> some View {
-//        modifier(MainTitle())
-//    }
-//}
+extension View {
+    func labelStyle() -> some View {
+        modifier(Label())
+    }
+}
 
 struct ContentView: View {
     @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Spain", "UK", "Ukraine", "US"].shuffled()
@@ -87,8 +60,10 @@ struct ContentView: View {
                         .font(.largeTitle.bold())
                         .foregroundColor(.primary)
                     HStack(spacing: 10) {
-                        Box("Round \(round)/8")
-                        Box("Score: \(score)")
+                        Text("Round \(round)/8")
+                            .labelStyle()
+                        Text("Score: \(score)")
+                            .labelStyle()
                         Button(role: .destructive) {
                             restartGame()
                         } label: {
@@ -116,7 +91,9 @@ struct ContentView: View {
                             Button {
                                 flagTapped(number)
                             } label: {
-                                FlagImage(countries[number])
+                                Image(countries[number])
+                                    .cornerRadius(20)
+                                    .shadow(radius: 10)
                             }
                         }
                     }
