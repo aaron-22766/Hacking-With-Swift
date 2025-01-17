@@ -13,10 +13,6 @@ struct ContentView: View {
     @State private var sleepAmount = 8.0
     @State private var coffeeAmount = 0
     
-    @State private var alertTitle = ""
-    @State private var alertMessage = ""
-    @State private var showingAlert = false
-    
     static var defaultWakeTime: Date {
         var components = DateComponents()
         components.hour = 7
@@ -47,7 +43,6 @@ struct ContentView: View {
         NavigationStack {
             ZStack {
                 LinearGradient(stops: [
-                    .init(color: Color("TopGradient"), location: 0),
                     .init(color: Color("TopGradient"), location: 0.05),
                     .init(color: Color("BottomGradient"), location: 0.55)
                 ], startPoint: .top, endPoint: .bottom)
