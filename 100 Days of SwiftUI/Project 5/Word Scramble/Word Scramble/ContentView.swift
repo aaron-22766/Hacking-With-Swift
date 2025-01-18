@@ -230,7 +230,7 @@ struct ContentView: View {
         if let startWordsURL = Bundle.main.url(forResource: "start", withExtension: "txt")  {
             if let startWords = try? String(contentsOf: startWordsURL) {
                 allWords = startWords.components(separatedBy: "\n")
-                rootWord = "showcase"
+                newRootWord()
                 return
             }
         }
