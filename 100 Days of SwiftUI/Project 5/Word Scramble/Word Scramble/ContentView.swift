@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import VariableBlur
 
 struct HighScore {
     var score: Int = 0
@@ -29,176 +30,206 @@ struct ContentView: View {
     @FocusState var textFieldFocus: Bool
     
     var body: some View {
-        NavigationStack {
-            ZStack {
-                LinearGradient(stops: [
-                    .init(color: .orange, location: 0),
-                    .init(color: .orange.opacity(0.3), location: 0.4),
-                    .init(color: Color("background"), location: 1)
-                ], startPoint: .top, endPoint: .bottom)
-                .ignoresSafeArea()
+        ZStack {
+            LinearGradient(stops: [
+                .init(color: .orange, location: 0),
+                .init(color: .orange.opacity(0.3), location: 0.4),
+                .init(color: Color("background"), location: 1)
+            ], startPoint: .top, endPoint: .bottom)
+            .ignoresSafeArea()
+            
+            VStack(alignment: .leading, spacing: 10) {
                 
-                VStack(spacing: 10) {
-                    
-                    HStack(spacing: 0) {
-                        Text("Highscore: ")
-                        Text("\(highScore.score)")
-                            .fontWeight(.black)
-                        if highScore.score > 0 {
-                            Text(" (\(highScore.word))")
-                        }
-                    }
-                    .padding()
-                    .background(Color("elements"))
-                    .foregroundStyle(.orange)
-                    .cornerRadius(15)
-                    .bold()
-                    
-                    Text("Build as many words as you can from the letters of this word.")
-                        .foregroundStyle(.secondary)
-                        .font(.caption.bold())
-                    
+                Text("WordScramble")
+                    .font(.largeTitle.bold())
+                
+                if highScore.score > 0 {
                     HStack {
-                        
-                        VStack {
-                            Text("Score")
-                                .foregroundStyle(.secondary)
-                                .font(.caption)
-                            Text("\(score)")
-                                .font(.title2)
-                        }
-                        .frame(width: 70, height: 70)
-                        .background(Color("elements"))
-                        .cornerRadius(15)
+                        Color.clear
+                            .frame(width: 60, height: 60)
                         
                         Spacer()
                         
-                        Text(rootWord)
-                            .font(.largeTitle)
-                            .frame(width: 200, height: 70)
-                            .background(Color("elements"))
-                            .cornerRadius(15)
+                        VStack {
+                            Text("Highscore")
+                                .foregroundStyle(.secondary)
+                                .font(.caption)
+                            Text("\(highScore.score) \(highScore.word)")
+                                .font(.title2)
+                        }
+                        .frame(height: 60)
+                        .padding(.horizontal)
+                        .background(Color("elements"))
+                        .cornerRadius(15)
+                        .foregroundStyle(.orange)
                         
                         Spacer()
                         
                         Button {
-                            newRootWord()
+                            withAnimation {
+                                highScore.score = 0
+                                highScore.word = ""
+                            }
                         } label: {
-                            Image(systemName: "arrow.up.arrow.down")
-                                .frame(width: 70, height: 70)
-                                .background(.orange)
-                                .cornerRadius(35)
-                                .foregroundStyle(.white)
+                            Image(systemName: "trash")
+                                .frame(width: 60, height: 60)
+                                .background(Color("elements"))
+                                .cornerRadius(30)
+                                .foregroundStyle(.orange)
                                 .font(.system(size: 23))
                         }
+                        
                     }
                     .bold()
+                }
+                
+                Text("Build as many words as you can from the letters of this word.")
+                    .foregroundStyle(.secondary)
+                    .font(.caption.bold())
+                
+                HStack {
                     
-                    ScrollView {
-                        ForEach(usedWords, id: \.self) { word in
-                            HStack {
-                                Image(systemName: "\(word.count).circle")
-                                Text(word)
-                                Spacer()
-                            }
-                            .padding()
-                            .background(Color("elements"))
-                            .cornerRadius(15)
-                        }
+                    VStack {
+                        Text("Score")
+                            .foregroundStyle(.secondary)
+                            .font(.caption)
+                        Text("\(score)")
+                            .font(.title2)
                     }
-                    .defaultScrollAnchor(.bottom)
+                    .frame(width: 60, height: 60)
+                    .background(Color("elements"))
+                    .cornerRadius(15)
                     
+                    Spacer()
                     
-                    if showingError {
-                        HStack(spacing: 10) {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .font(.system(size: 30))
-                            VStack(alignment: .leading) {
-                                Text(errorTitle)
-                                    .font(.title2.bold())
-                                Text(errorMessage)
-                                    .font(.caption)
-                                    .foregroundStyle(.black.opacity(0.5))
-                            }
+                    Text(rootWord)
+                        .font(.largeTitle)
+                        .frame(width: 220, height: 60)
+                        .background(Color("elements"))
+                        .cornerRadius(15)
+                    
+                    Spacer()
+                    
+                    Button {
+                        newRootWord()
+                    } label: {
+                        Image(systemName: "arrow.up.arrow.down")
+                            .frame(width: 60, height: 60)
+                            .background(.orange)
+                            .cornerRadius(30)
+                            .foregroundStyle(.white)
+                            .font(.system(size: 23))
+                    }
+                    
+                }
+                .bold()
+
+                    
+                ScrollView {
+                    ForEach(usedWords, id: \.self) { word in
+                        HStack {
+                            Image(systemName: "\(word.count).circle")
+                            Text(word)
                             Spacer()
-                            Button {
-                                withAnimation {
-                                    showingError = false
-                                    newWord = ""
-                                }
-                            } label: {
-                                Image(systemName: "xmark.circle.fill")
-                            }
-                            .font(.system(size: 20))
-                            .foregroundStyle(.black.opacity(0.5))
                         }
                         .padding()
-                        .background(.yellow)
-                        .foregroundStyle(.black)
+                        .background(Color("elements"))
                         .cornerRadius(15)
                     }
-                    
-                    ZStack {
-                        TextField("Enter your word", text: $newWord, axis: .vertical)
-                            .autocorrectionDisabled()
-                            .textInputAutocapitalization(.never)
-                            .keyboardType(.asciiCapable)
-                            .focused($textFieldFocus)
-                            .submitLabel(.go)
-                            .onChange(of: textFieldFocus) {
-                                if textFieldFocus {
-                                    withAnimation {
-                                        newWord = ""
-                                        showingError = false
-                                    }
-                                }
-                            }
-                            .onChange(of: newWord) { oldValue, newValue in
-                                if newValue.contains("\n") {
-                                    newWord = oldValue
-                                    addNewWord()
-                                    return
-                                }
-                                if newValue.count > 8 {
-                                    newWord = oldValue
-                                }
-                            }
-                        
-                        HStack {
-                            Spacer()
-                            Button {
-                                withAnimation {
-                                    textFieldFocus = false
-                                }
-                            } label: {
-                                Image(systemName: "keyboard.chevron.compact.down")
-                            }
-                            .foregroundStyle(Color("keyboardButton"))
-                            .font(.system(size: 20))
+                }
+                .defaultScrollAnchor(.bottom)
+
+                
+                
+                if showingError {
+                    HStack(spacing: 10) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .font(.system(size: 30))
+                        VStack(alignment: .leading) {
+                            Text(errorTitle)
+                                .font(.title2.bold())
+                            Text(errorMessage)
+                                .font(.caption)
+                                .foregroundStyle(.black.opacity(0.5))
                         }
-                        .opacity(textFieldFocus ? 1 : 0)
+                        Spacer()
+                        Button {
+                            withAnimation {
+                                showingError = false
+                                newWord = ""
+                            }
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                        }
+                        .font(.system(size: 20))
+                        .foregroundStyle(.black.opacity(0.5))
                     }
-                    .padding(15)
-                    .background(.orange.opacity(0.3))
+                    .padding()
+                    .background(.yellow)
+                    .foregroundStyle(.black)
                     .cornerRadius(15)
                 }
-                .padding()
-                .onAppear(perform: startGame)
-                .onSubmit(addNewWord)
+                
+                ZStack {
+                    TextField("Enter your word", text: $newWord, axis: .vertical)
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.never)
+                        .keyboardType(.asciiCapable)
+                        .focused($textFieldFocus)
+                        .submitLabel(.go)
+                        .onChange(of: textFieldFocus) {
+                            if textFieldFocus {
+                                withAnimation {
+                                    newWord = ""
+                                    showingError = false
+                                }
+                            }
+                        }
+                        .onChange(of: newWord) { oldValue, newValue in
+                            if newValue.contains("\n") {
+                                newWord = oldValue
+                                addNewWord()
+                                return
+                            }
+                            if newValue.count > 8 {
+                                newWord = oldValue
+                            }
+                        }
+                    
+                    HStack {
+                        Spacer()
+                        Button {
+                            withAnimation {
+                                textFieldFocus = false
+                            }
+                        } label: {
+                            Image(systemName: "keyboard.chevron.compact.down")
+                        }
+                        .foregroundStyle(Color("swapped"))
+                        .font(.system(size: 20))
+                    }
+                    .opacity(textFieldFocus ? 1 : 0)
+                }
+                .padding(15)
+                .background(.orange.opacity(0.3))
+                .cornerRadius(15)
             }
-            .navigationTitle("WordScramble")
+            .padding()
+            .onAppear(perform: startGame)
+            .onSubmit(addNewWord)
         }
+        
     }
     
     func addNewWord() {
         let answer = newWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         
-        if answer.count == 0 {
+        guard answer.count > 0 else {
             showingError = false
             return
         }
         
-        if answer == rootWord {
+        guard answer != rootWord else {
             wordError(title: "Word is root word", message: "Now you're just lazy!")
             return
         }
@@ -272,6 +303,9 @@ struct ContentView: View {
     }
     
     func isReal(word: String) -> Bool {
+        guard word.count > 1 else {
+            return ["a", "i", "o"].contains(word)
+        }
         let checker = UITextChecker()
         let range = NSRange(location: 0, length: word.utf16.count)
         let misspelledRange = checker.rangeOfMisspelledWord(in: word, range: range, startingAt: 0, wrap: false, language: "en")

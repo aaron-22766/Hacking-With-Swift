@@ -12,6 +12,7 @@
 		CE7DF9972C3D90DB009921AF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7DF9962C3D90DB009921AF /* ContentView.swift */; };
 		CE7DF9992C3D90DD009921AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE7DF9982C3D90DD009921AF /* Assets.xcassets */; };
 		CE7DF99C2C3D90DD009921AF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE7DF99B2C3D90DD009921AF /* Preview Assets.xcassets */; };
+		CECCD9E32D3C499300B9B0B2 /* VariableBlur in Frameworks */ = {isa = PBXBuildFile; productRef = CECCD9E22D3C499300B9B0B2 /* VariableBlur */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CECCD9E32D3C499300B9B0B2 /* VariableBlur in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,6 +116,9 @@
 				Base,
 			);
 			mainGroup = CE7DF9882C3D90DB009921AF;
+			packageReferences = (
+				CECCD9E12D3C499300B9B0B2 /* XCRemoteSwiftPackageReference "VariableBlur" */,
+			);
 			productRefGroup = CE7DF9922C3D90DB009921AF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -348,6 +353,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		CECCD9E12D3C499300B9B0B2 /* XCRemoteSwiftPackageReference "VariableBlur" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nikstar/VariableBlur";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CECCD9E22D3C499300B9B0B2 /* VariableBlur */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CECCD9E12D3C499300B9B0B2 /* XCRemoteSwiftPackageReference "VariableBlur" */;
+			productName = VariableBlur;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CE7DF9892C3D90DB009921AF /* Project object */;
 }
